@@ -1,0 +1,19 @@
+version: '3'
+services:
+  python:
+    container_name: python
+    image: swr.cn-north-4.myhuaweicloud.com/silverfenrir/python3:latest
+    hostname: "python"
+    ports:
+      - 5000:5000
+      - 5001:5001
+      - 5002:5002
+      - 5003:5003
+      - 5004:5004
+    network_mode: bridge
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup
+      - /home/projects/python:/home/projects
+    command: /sbin/init
+    privileged: true
+    restart: always

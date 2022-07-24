@@ -1,0 +1,50 @@
+version: '3'
+services:
+  portainer:
+    container_name: portainer
+    image: portainer/portainer
+    hostname: "portainer"
+    ports:
+      - 9000:9000
+    network_mode: bridge
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /root/docker/portainer/data:/data
+      - /root/docker/portainer/public:/public
+    restart: always
+  jenkins:
+    container_name: jenkins
+    image: jenkins/jenkins:lts-jdk11
+    hostname: "jenkins"
+    user: root
+    ports:
+      # 发布端口
+      - 6001:8080
+      # 基于 JNLP 的 Jenkins 代理通过 TCP 端口 50000 与 Jenkins master 进行通信
+      - 50000:50000
+    network_mode: bridge
+    environment:
+      TZ: Asia/Shanghai
+      JAVA_OPTS: -Djava.util.logging.config.file=/var/jenkins_home/log.properties
+    volumes:
+      - /root/docker/jenkins/jenkins_home:/var/jenkins_home
+      - /etc/localtime:/etc/localtime
+    restart: always
+  minio:
+    container_name: minio
+    image: minio/minio
+    hostname: "minio"
+    ports:
+      - 6002:9000 # api 端口
+      - 6003:9001 # 控制台端口
+    network_mode: bridge
+    environment:
+      MINIO_ROOT_USER: fenrir    #管理后台用户名
+      MINIO_ROOT_PASSWORD: Minio_7cb1dc18 #管理后台密码，最小8个字符
+      MINIO_SERVER_URL: http://mio.silver-fenrir.cn # 更改分享主机名（域名、ip/端口）
+    volumes:
+      - /root/docker/minio/data:/data               #映射当前目录下的data目录至容器内/data目录
+      - /root/docker/minio/config:/root/.minio/     #映射配置目录
+    command: server --address ':9000' --console-address ':9001' /data  #指定容器中的目录 /data
+    privileged: true
+    restart: always
