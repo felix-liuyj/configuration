@@ -12,6 +12,51 @@ services:
       - /root/docker/portainer/data:/data
       - /root/docker/portainer/public:/public
     restart: always
+  mysql:
+    container_name: mysql
+    image: swr.cn-north-4.myhuaweicloud.com/silverfenrir/mysql:latest
+    hostname: "mysql"
+    ports:
+      - 3306:3306
+    network_mode: bridge
+    environment:
+      MYSQL_ROOT_PASSWORD: MySQL-7cb1dc18
+    volumes:
+      - /root/docker/mysql/conf:/etc/mysql
+      - /root/docker/mysql/logs:/var/log/mysql
+      - /root/docker/mysql/data:/var/lib/mysql
+      - /root/docker/mysql/files:/var/lib/mysql-files
+    restart: always
+  python:
+    container_name: python
+    image: swr.cn-north-4.myhuaweicloud.com/silverfenrir/python3:latest
+    hostname: "python"
+    ports:
+      - 5000:5000
+      - 5001:5001
+      - 5002:5002
+      - 5003:5003
+      - 5004:5004
+    network_mode: bridge
+    environment:
+      PIPENV_VENV_IN_PROJECT: 1
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup
+      - /home/projects/python:/home/projects
+      - /root/docker/python/logs:/var/log/
+    command:
+      - sh
+      - -c
+      - |
+          yum -y install gcc  gcc-c++ zlib zlib-devel openssl openssl-devel pcre pcre-devel geoipupdate gd libXpm libxslt sqlite-devel
+          pip install uwsgi
+          cd /home/projects/Fisher
+          cp -f /home/projects/fisher-secure.py app/config/secure.py
+          pipenv install
+          /usr/local/python3/bin/uwsgi uwsgi.ini &
+          /sbin/init
+    privileged: true
+    restart: always
   jenkins:
     container_name: jenkins
     image: jenkins/jenkins:lts-jdk11

@@ -11,9 +11,22 @@ services:
       - 5003:5003
       - 5004:5004
     network_mode: bridge
+    environment:
+      PIPENV_VENV_IN_PROJECT: 1
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup
       - /home/projects/python:/home/projects
-    command: /sbin/init
+      - /root/docker/python/logs:/var/log/
+    command:
+      - sh
+      - -c
+      - |
+          yum -y install gcc  gcc-c++ zlib zlib-devel openssl openssl-devel pcre pcre-devel geoipupdate gd libXpm libxslt sqlite-devel
+          pip install uwsgi
+          cd /home/projects/Fisher
+          cp -f /home/projects/fisher-secure.py app/config/secure.py
+          pipenv install
+          /usr/local/python3/bin/uwsgi uwsgi.ini &
+          /sbin/init
     privileged: true
     restart: always
