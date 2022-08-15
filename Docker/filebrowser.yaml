@@ -1,0 +1,16 @@
+# vi docker-compose.yml
+version: '3'
+services:
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    container_name: filebrowser
+    ports:
+      - "6003:80/tcp"
+    networks:
+      - bridge
+    volumes:
+      - /root/docker/filebrowser/srv:/srv
+      - /root/docker/filebrowser/filebrowser.db:/database.db
+      - /root/docker/filebrowser/.filebrowser.json:/.filebrowser.json
+      - /etc/localtime:/etc/localtime:ro
+    restart: always
