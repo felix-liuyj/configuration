@@ -5,12 +5,13 @@ services:
     image: filebrowser/filebrowser
     hostname: "filebrowser"
     ports:
-      - "6004:80/tcp"
+      - "6004:80"
     network_mode: bridge
     volumes:
-      - /root/docker/filebrowser/srv:/srv
-      - /root/docker/filebrowser/branding:/home/branding
-      - /root/docker/filebrowser/filebrowser.db:/database.db
+      - /root/docker/filebrowser/root:/root
+      - /root/docker/filebrowser/home:/home
+      - /root/docker/filebrowser/logs:/var/log
+      - /root/docker/filebrowser/filebrowser.db:/etc/filebrowser/filebrowser.db
       - /root/docker/filebrowser/.filebrowser.json:/.filebrowser.json
       - /etc/localtime:/etc/localtime:ro
     restart: always
