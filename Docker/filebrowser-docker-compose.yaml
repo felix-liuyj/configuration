@@ -5,7 +5,7 @@ services:
     image: filebrowser/filebrowser:latest
     hostname: "filebrowser"
     ports:
-      - "6003:80/tcp"
+      - "6004:80/tcp"
     network_mode: bridge
     volumes:
       - /root/docker/filebrowser/srv:/srv
