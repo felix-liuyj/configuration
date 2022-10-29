@@ -1,0 +1,31 @@
+global:
+  scrape_interval:     5s
+  evaluation_interval: 5s
+
+  external_labels:
+      monitor: 'dashboard'
+
+alerting:
+ alertmanagers:
+ - static_configs:
+    - targets:
+        - "127.0.0.1:6010"
+
+rule_files:
+  - /etc/prometheus/rules/*.rules
+
+scrape_configs:
+  - job_name: 'prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['prometheus:6008']
+
+  - job_name: "fisher"
+    static_configs:
+      - targets: ['127.0.0.1:5001','pushgateway:6009']
+
+  - job_name: 'mysql'
+    static_configs:
+     - targets: ['127.0.0.1:3306']
+       labels:
+          instance: mysql

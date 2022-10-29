@@ -1,0 +1,19 @@
+global:
+  resolve_timeout: 5m
+  smtp_smarthost: 'smtp.ym.163.com:994'
+  smtp_from: 'silver-fenrir@silver-fenrir.cn'
+  smtp_auth_username: 'silver-fenrir@silver-fenrir.cn'
+  smtp_auth_password: '6XN38U4gNVHJe4Dd'
+  smtp_require_tls: true
+
+route:
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 10m
+  receiver: 'shenghuntianlang'
+
+receivers:
+  - name: 'shenghuntianlang'
+    email_configs:
+      - to: 'shenghuntianlang@outlook.com'
