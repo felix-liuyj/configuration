@@ -1,0 +1,21 @@
+version: '3'
+services:
+  wordpress:
+    container_name: wordpress
+    ports:
+      - "6005:80"
+    network_mode: bridge
+    image: wordpress
+    volumes:
+      - wordpress_web:/var/www/html
+      - wordpress_wp:/usr/src/wordpress/
+    environment:
+      WORDPRESS_DB_HOST: 172.17.0.1
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: WP-7cb1dc18
+    restart: always
+
+volumes:
+  wordpress_web: {}
+  wordpress_wp: {}

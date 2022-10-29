@@ -5,7 +5,7 @@ services:
     image: swr.cn-north-4.myhuaweicloud.com/silverfenrir/mysql:latest
     hostname: "mysql"
     ports:
-      - 3306:3306
+      - "3306:3306"
     network_mode: bridge
     environment:
       MYSQL_ROOT_PASSWORD: MySQL-7cb1dc18

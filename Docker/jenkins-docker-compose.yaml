@@ -7,9 +7,9 @@ services:
     user: root
     ports:
       # 发布端口
-      - 6001:8080
+      - "6001:8080"
       # 基于 JNLP 的 Jenkins 代理通过 TCP 端口 50000 与 Jenkins master 进行通信
-      - 50000:50000
+      - "50000:50000"
     network_mode: bridge
     environment:
       TZ: Asia/Shanghai

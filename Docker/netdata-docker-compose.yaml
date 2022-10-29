@@ -5,10 +5,8 @@ services:
     image: netdata/netdata
     hostname: "netdata"
     ports:
-      - 19999:19999
+      - "6006:19999"
     network_mode: bridge
-    environment:
-      - DOCKER_USR=root
     cap_add:
       - SYS_PTRACE
     security_opt:
@@ -17,9 +15,14 @@ services:
       - /root/docker/netdata/config:/etc/netdata
       - /root/docker/netdata/lib:/var/lib/netdata
       - /root/docker/netdata/cache:/var/cache/netdata
+      - /root/docker/netdata/web:/usr/share/netdata/web
       - /etc/passwd:/host/etc/passwd:ro
       - /etc/group:/host/etc/group:ro
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /etc/os-release:/host/etc/os-release:ro
-    restart: always
+    environment:
+      - DOCKER_USR=root
+      - NETDATA_CLAIM_TOKEN=VXcFk9wPDgNBtJazBZxt34AeRjz9fJtq25ss4gdj6lb4NIM5ltvMgTtMLp_0Y9okdUR1opeJLvO4dkZUMHYDwZ0jJmgQdvKRDgRAIzeTLfsxsN6WgoHK8kJLRxgmfz90ITX_Z_M
+      - NETDATA_CLAIM_URL=https://app.netdata.cloud
+      - NETDATA_CLAIM_ROOMS=
