@@ -21,7 +21,7 @@ services:
       - sh
       - -c
       - |
-          yum -y install gcc  gcc-c++ zlib zlib-devel openssl openssl-devel pcre pcre-devel geoipupdate gd libXpm libxslt sqlite-devel
+          yum -y install gcc  gcc-c++ zlib zlib-devel openssl openssl-devel pcre pcre-devel geoipupdate gd libXpm libxslt sqlite-devel --skip-broken
           pip install uwsgi
           cd /home/projects/Fisher
           cp -f /home/projects/fisher-secure.py app/config/secure.py
