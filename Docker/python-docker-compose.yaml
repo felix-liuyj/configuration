@@ -30,3 +30,6 @@ services:
           /sbin/init
     privileged: true
     restart: always
+
+# 逐行安装 requirement.txt 内的模块
+# cat requirement_s.txt | xargs -n 1 pip install -i https://pypi.tuna.tsinghua.edu.cn/simple/
