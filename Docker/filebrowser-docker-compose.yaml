@@ -9,6 +9,7 @@ services:
     network_mode: bridge
     volumes:
       - /root/docker/filebrowser/root:/root
+      - /root/docker/jenkins/jenkins_home/workspace/download@2:/root/jenkins_download_ci
       - /root/docker/filebrowser/home:/home
       - /root/docker/filebrowser/logs:/var/log
       - /root/docker/filebrowser/filebrowser.db:/etc/filebrowser/filebrowser.db
