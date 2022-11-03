@@ -33,3 +33,4 @@ services:
 
 # 逐行安装 requirement.txt 内的模块
 # cat requirement_s.txt | xargs -n 1 pip install -i https://pypi.tuna.tsinghua.edu.cn/simple/
+# yum install gcc make libffi-devel pkgconfig zlib-devel bzip2-devel sqlite-devel ncurses-devel expat-devel openssl-devel tk-devel gdbm-devel python3-cffi gc-devel
