@@ -16,8 +16,8 @@ services:
       - /home/docker/gerrit/index:/var/gerrit/index
       - /home/docker/gerrit/cache:/var/gerrit/cache
     environment:
-      - CANONICAL_WEB_URL=http://localhost
-    # command: init
+      - CANONICAL_WEB_URL=http://172.29.153.93
+    command: init
 
   ldap:
     container_name: gerrit-ldap-ldap
@@ -26,7 +26,9 @@ services:
       - "389:389"
       - "636:636"
     environment:
-      - LDAP_ADMIN_PASSWORD=secret
+      - LDAP_ORGANISATION=materia-logic
+      - LDAP_DOMAIN=materia-logic.com
+      - LDAP_ADMIN_PASSWORD=MLAdmin2307
     volumes:
       - /home/docker/gerrit/ldap/var:/var/lib/ldap
       - /home/docker/gerrit/ldap/etc:/etc/ldap/slapd.d
