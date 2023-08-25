@@ -1,0 +1,55 @@
+version: '3'
+
+services:
+  ldap:
+    container_name: ldap
+    image: osixia/openldap
+    ports:
+      - "389:389"
+      - "636:636"
+    environment:
+      - LDAP_ORGANISATION=materia-logic
+      - LDAP_DOMAIN=materia-logic.com
+      - LDAP_ADMIN_PASSWORD=MLAdmin2307
+    volumes:
+      - /mnt/data/docker/ldap/var:/var/lib/ldap
+      - /mnt/data/docker/ldap/etc:/etc/ldap/slapd.d
+
+  ldap-admin:
+    container_name: ldap-admin
+    image: osixia/phpldapadmin
+    ports:
+      - "8443:443"
+    environment:
+      - PHPLDAPADMIN_LDAP_HOSTS=ldap
+
+  ldap-self-service-password:
+    container_name: ldap-self-service-password
+    image: tiredofit/self-service-password
+    restart: always
+    ports:
+      - "8002:80"
+    environment:
+      - LDAP_SERVER=ldap
+      - LDAP_BINDDN=cn=admin,dc=materia-logic,dc=com
+      - LDAP_BINDPASS=MLAdmin2307
+      - LDAP_BASE_SEARCH=dc=materia-logic,dc=com
+      - MAIL_FROM=no-reply@mail.taotaro.app
+      - SMTP_DEBUG=0
+      - SMTP_HOST=smtpdm-ap-southeast-1.aliyun.com
+      - SMTP_USER=no-reply@mail.taotaro.app
+      - SMTP_PASS=1000SunnyTitan
+      - SMTP_PORT=465
+      - SMTP_SECURE_TYPE=ssl
+      - SMTP_AUTH_ON=true
+      - NOTIFY_ON_CHANGE=true
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /mnt/data/docker/ldap/self-service-password/htdocs:/www/ssp
+      - /mnt/data/docker/ldap/self-service-password/logs:/www/logs
+    deploy:
+      resources:
+        limits:
+           memory: 2G
+        reservations:
+           memory: 512M
