@@ -1,59 +1,72 @@
 version: "3"
+
 services:
-  grafana:
-    image: grafana/grafana
-    container_name: grafana
-    user: root
-    ports:
-      - "6007:3000"
-    volumes:
-      - /root/docker/prometheus/conf/grafana:/etc/grafana
-      - /root/docker/prometheus/data/prometheus/grafana_data:/var/lib/grafana
-    depends_on:
-      - prometheus
-    networks:
-      - net-prometheus
-    restart: always
+    monitor-prometheus:
+        image: prom/prometheus
+        container_name: monitor-prometheus
+        hostname: monitor-prometheus
+        restart: always
+        user: root
+        volumes:
+            - /mnt/data/docker/monitor/prometheus/conf:/etc/prometheus
+            - /mnt/data/docker/monitor/prometheus/data:/prometheus
+        ports:
+            - "8003:9090"
+        networks:
+            - monitor
+        command:
+            - "--config.file=/etc/prometheus/prometheus.yml"
+            - "--storage.tsdb.path=/prometheus"
 
-  prometheus:
-    image: prom/prometheus
-    container_name: prometheus
-    user: root
-    ports:
-      - "6008:9090"
-    volumes:
-      - /root/docker/prometheus/conf/prometheus:/etc/prometheus
-      - /root/docker/prometheus/data/prometheus/prometheus_db:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-      - '--web.console.templates=/usr/share/prometheus/consoles'
-    networks:
-      - net-prometheus
-    restart: always
+    monitor-alertmanager:
+        image: prom/alertmanager
+        container_name: monitor-alertmanager
+        hostname: monitor-alertmanager
+        user: root
+        restart: always
+        volumes:
+            - /mnt/data/docker/monitor/alertmanager/conf:/etc/alertmanager
+        ports:
+            - "8004:9093"
+        networks:
+            - monitor
 
-  pushgateway:
-    image: prom/pushgateway
-    container_name: pushgateway
-    user: root
-    ports:
-      - "6009:9091"
-    volumes:
-      - /root/docker/prometheus/data/prometheus/pushgateway_data:/var/lib/pushgateway
-    restart: always
+    monitor-grafana:
+        image: grafana/grafana
+        container_name: monitor-grafana
+        hostname: monitor-grafana
+        user: root
+        restart: always
+        ports:
+            - "8005:3000"
+        volumes:
+            - /mnt/data/docker/monitor/grafana/data:/var/lib/grafana
+            - /mnt/data/docker/monitor/grafana/config:/etc/grafana
+        networks:
+            - monitor
 
-  alertmanager:
-    image: prom/alertmanager
-    hostname: alertmanager
-    container_name: alertmanager
-    user: root
-    ports:
-      - "6010:9093"
-    volumes:
-      - /root/docker/prometheus/conf/alertmanager:/etc/alertmanager
-      - /root/docker/prometheus/data/prometheus/alertmanager_data:/var/lib/alertmanager
-    restart: always
+    monitor-node-exporter:
+        image: quay.io/prometheus/node-exporter
+        container_name: monitor-node-exporter
+        hostname: monitor-node-exporter
+        restart: always
+        user: root
+        ports:
+            - "8100:9100"
+        networks:
+            - monitor
+
+    monitor-consul:
+        image: consul:1.9.4
+        container_name: monitor-consul
+        restart: always
+        user: root
+        ports:
+            - "8101:8500"
+        volumes:
+            - /mnt/data/docker/monitor/consul/data:/consul/data
+        command: [agent, -server, -ui, -client=0.0.0.0, -bootstrap-expect=1]
 
 networks:
-  net-prometheus:
+    monitor:
+        driver: bridge
