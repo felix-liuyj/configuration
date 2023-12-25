@@ -1,0 +1,245 @@
+version: '2'
+services:
+  config-server1:
+    image: mongo
+    container_name: config-server1
+    privileged: true
+    networks:
+      - mongo-cluster-network
+    command: --config /data/configdb/conf/mongo.conf
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /tmp/mongo-cluster/config-server:/data/configdb
+      - /tmp/mongo-cluster/config-server/data/1:/data/db
+      - /tmp/mongo-cluster/config-server/logs/1:/data/logs
+
+  config-server2:
+    image: mongo
+    container_name: config-server2
+    privileged: true
+    networks:
+      - mongo-cluster-network
+    command: --config /data/configdb/conf/mongo.conf
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /tmp/mongo-cluster/config-server:/data/configdb
+      - /tmp/mongo-cluster/config-server/data/2:/data/db
+      - /tmp/mongo-cluster/config-server/logs/2:/data/logs
+
+  config-server3:
+    image: mongo
+    container_name: config-server3
+    privileged: true
+    networks:
+      - mongo-cluster-network
+    command: --config /data/configdb/conf/mongo.conf
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /tmp/mongo-cluster/config-server:/data/configdb
+      - /tmp/mongo-cluster/config-server/data/3:/data/db
+      - /tmp/mongo-cluster/config-server/logs/3:/data/logs
+
+  shard1-server1:
+    image: mongo
+    container_name: shard1-server1
+    privileged: true
+    networks:
+      - mongo-cluster-network
+    command: --config /data/configdb/conf/mongo.conf
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /tmp/mongo-cluster/shard1-server:/data/configdb
+      - /tmp/mongo-cluster/shard1-server/data/1:/data/db
+      - /tmp/mongo-cluster/shard1-server/logs/1:/data/logs
+
+  shard1-server2:
+    image: mongo
+    container_name: shard1-server2
+    privileged: true
+    networks:
+      - mongo-cluster-network
+    command: --config /data/configdb/conf/mongo.conf
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /tmp/mongo-cluster/shard1-server:/data/configdb
+      - /tmp/mongo-cluster/shard1-server/data/2:/data/db
+      - /tmp/mongo-cluster/shard1-server/logs/2:/data/logs
+
+  shard1-server3:
+    image: mongo
+    container_name: shard1-server3
+    privileged: true
+    networks:
+      - mongo-cluster-network
+    command: --config /data/configdb/conf/mongo.conf
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /tmp/mongo-cluster/shard1-server:/data/configdb
+      - /tmp/mongo-cluster/shard1-server/data/3:/data/db
+      - /tmp/mongo-cluster/shard1-server/logs/3:/data/logs
+
+  shard2-server1:
+    image: mongo
+    container_name: shard2-server1
+    privileged: true
+    networks:
+      - mongo-cluster-network
+    command: --config /data/configdb/conf/mongo.conf
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /tmp/mongo-cluster/shard2-server:/data/configdb
+      - /tmp/mongo-cluster/shard2-server/data/1:/data/db
+      - /tmp/mongo-cluster/shard2-server/logs/1:/data/logs
+
+  shard2-server2:
+    image: mongo
+    container_name: shard2-server2
+    privileged: true
+    networks:
+      - mongo-cluster-network
+    command: --config /data/configdb/conf/mongo.conf
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /tmp/mongo-cluster/shard2-server:/data/configdb
+      - /tmp/mongo-cluster/shard2-server/data/2:/data/db
+      - /tmp/mongo-cluster/shard2-server/logs/2:/data/logs
+
+  shard2-server3:
+    image: mongo
+    container_name: shard2-server3
+    privileged: true
+    networks:
+      - mongo-cluster-network
+    command: --config /data/configdb/conf/mongo.conf
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /tmp/mongo-cluster/shard2-server:/data/configdb
+      - /tmp/mongo-cluster/shard2-server/data/3:/data/db
+      - /tmp/mongo-cluster/shard2-server/logs/3:/data/logs
+
+  shard3-server1:
+    image: mongo
+    container_name: shard3-server1
+    privileged: true
+    networks:
+      - mongo-cluster-network
+    command: --config /data/configdb/conf/mongo.conf
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /tmp/mongo-cluster/shard3-server:/data/configdb
+      - /tmp/mongo-cluster/shard3-server/data/1:/data/db
+      - /tmp/mongo-cluster/shard3-server/logs/1:/data/logs
+
+  shard3-server2:
+    image: mongo
+    container_name: shard3-server2
+    privileged: true
+    networks:
+      - mongo-cluster-network
+    command: --config /data/configdb/conf/mongo.conf
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /tmp/mongo-cluster/shard3-server:/data/configdb
+      - /tmp/mongo-cluster/shard3-server/data/2:/data/db
+      - /tmp/mongo-cluster/shard3-server/logs/2:/data/logs
+
+  shard3-server3:
+    image: mongo
+    container_name: shard3-server3
+    privileged: true
+    networks:
+      - mongo-cluster-network
+    command: --config /data/configdb/conf/mongo.conf
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /tmp/mongo-cluster/shard3-server:/data/configdb
+      - /tmp/mongo-cluster/shard3-server/data/3:/data/db
+      - /tmp/mongo-cluster/shard3-server/logs/3:/data/logs
+
+  shard4-server1:
+    image: mongo
+    container_name: shard4-server1
+    privileged: true
+    networks:
+      - mongo-cluster-network
+    command: --config /data/configdb/conf/mongo.conf
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /tmp/mongo-cluster/shard4-server:/data/configdb
+      - /tmp/mongo-cluster/shard4-server/data/1:/data/db
+      - /tmp/mongo-cluster/shard4-server/logs/1:/data/logs
+
+  shard4-server2:
+    image: mongo
+    container_name: shard4-server2
+    privileged: true
+    networks:
+      - mongo-cluster-network
+    command: --config /data/configdb/conf/mongo.conf
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /tmp/mongo-cluster/shard4-server:/data/configdb
+      - /tmp/mongo-cluster/shard4-server/data/2:/data/db
+      - /tmp/mongo-cluster/shard4-server/logs/2:/data/logs
+
+  shard4-server3:
+    image: mongo
+    container_name: shard4-server3
+    privileged: true
+    networks:
+      - mongo-cluster-network
+    command: --config /data/configdb/conf/mongo.conf
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /tmp/mongo-cluster/shard4-server:/data/configdb
+      - /tmp/mongo-cluster/shard4-server/data/3:/data/db
+      - /tmp/mongo-cluster/shard4-server/logs/3:/data/logs
+
+  mongos-server1:
+    image: mongo
+    container_name: mongos-server1
+    privileged: true
+    entrypoint: "mongos"
+    networks:
+      - mongo-cluster-network
+    ports:
+      - "30001:27017"
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /tmp/mongo-cluster/mongos-server:/data/configdb
+      - /tmp/mongo-cluster/mongos-server/logs/1:/data/logs
+    command: --config /data/configdb/conf/mongo.conf
+
+  mongos-server2:
+    image: mongo
+    container_name: mongos-server2
+    privileged: true
+    entrypoint: "mongos"
+    networks:
+      - mongo-cluster-network
+    ports:
+      - "30002:27017"
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /tmp/mongo-cluster/mongos-server:/data/configdb
+      - /tmp/mongo-cluster/mongos-server/logs/2:/data/logs
+    command: --config /data/configdb/conf/mongo.conf
+
+  mongos-server3:
+    image: mongo
+    container_name: mongos-server3
+    privileged: true
+    entrypoint: "mongos"
+    networks:
+      - mongo-cluster-network
+    ports:
+      - "30003:27017"
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /tmp/mongo-cluster/mongos-server:/data/configdb
+      - /tmp/mongo-cluster/mongos-server/logs/3:/data/logs
+    command: --config /data/configdb/conf/mongo.conf
+
+networks:
+  mongo-cluster-network:
+    driver: bridge
