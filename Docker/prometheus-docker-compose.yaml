@@ -51,10 +51,15 @@ services:
         hostname: monitor-node-exporter
         restart: always
         user: root
+        pid: host
         ports:
             - "8100:9100"
         networks:
             - monitor
+        command:
+            - '--path.rootfs=/host'
+        volumes:
+            - '/:/host:ro,rslave'
 
     monitor-consul:
         image: consul:1.9.4
