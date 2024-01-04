@@ -7,7 +7,7 @@ services:
     container_name: knowstreaming-manager
     user: root
     networks:
-      - inner_net
+      - kafka_net
     privileged: true
     restart: always
     depends_on:
@@ -45,7 +45,7 @@ services:
     container_name: knowstreaming-ui
     user: root
     networks:
-      - inner_net
+      - kafka_net
     restart: always
     ports:
       - '8088:80'
@@ -61,7 +61,7 @@ services:
     container_name: elasticsearch-single
     user: root
     networks:
-      - inner_net
+      - kafka_net
     restart: always
     expose:
       - 9200
@@ -86,7 +86,7 @@ services:
   #  container_name: knowstreaming-init
   #  user: root
   #  networks:
-  #    - inner_net
+  #    - kafka_net
   #  depends_on:
   #    - elasticsearch-single
   #  command:
@@ -102,7 +102,7 @@ services:
     container_name: knowstreaming-mysql
     user: root
     networks:
-      - inner_net
+      - kafka_net
     restart: always
     environment:
       TZ: Asia/Shanghai
@@ -123,5 +123,5 @@ services:
 
 
 networks:
-  inner_net:
-    driver: bridge
+  kafka_net:
+    external: true

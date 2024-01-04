@@ -1,31 +1,60 @@
+# my global config
 global:
-  scrape_interval:     5s
-  evaluation_interval: 5s
+  scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
 
-  external_labels:
-      monitor: 'dashboard'
-
+# Alertmanager configuration
 alerting:
- alertmanagers:
- - static_configs:
-    - targets:
-        - "127.0.0.1:6010"
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - ip-172-31-19-148.ap-east-1.compute.internal:8004
 
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
 rule_files:
-  - /etc/prometheus/rules/*.rules
+  # - "first_rules.yml"
+  # - "second_rules.yml"
 
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
 scrape_configs:
-  - job_name: 'prometheus'
-    scrape_interval: 5s
-    static_configs:
-      - targets: ['prometheus:6008']
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: "node-exporter"
 
-  - job_name: "fisher"
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
     static_configs:
-      - targets: ['127.0.0.1:5001','pushgateway:6009']
+      - targets:
+          - ip-172-31-19-148.ap-east-1.compute.internal:8100
+        labels:
+          name: "aws-devops-main"
+          category: "devops-server"
+      - targets:
+          - ip-172-31-26-59.ap-east-1.compute.internal:8100
+        labels:
+          name: "aws-deploy-production"
+          category: "deploy-server"
+      - targets:
+          - ip-172-31-27-134.ap-east-1.compute.internal:8100
+        labels:
+          name: "aws-mongodb-cluster-601"
+          category: "mongodb-server"
+      - targets:
+          - ip-172-31-30-14.ap-east-1.compute.internal:8100
+        labels:
+          name: "aws-mongodb-cluster-602"
+          category: "mongodb-server"
+      - targets:
+          - ip-172-31-23-122.ap-east-1.compute.internal:8100
+        labels:
+          name: "aws-mongodb-cluster-603"
+          category: "mongodb-server"
 
-  - job_name: 'mysql'
+  - job_name: "mongodb-exporter"
     static_configs:
-     - targets: ['127.0.0.1:3306']
-       labels:
-          instance: mysql
+      - targets:
+          - ip-172-31-19-148.ap-east-1.compute.internal:8101
+        labels:
+          name: "AWS Production Cluster"
+          category: "mongodb-cluster"

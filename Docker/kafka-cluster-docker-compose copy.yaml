@@ -1,0 +1,124 @@
+version: "3"
+
+services:
+  kafka-node-1:
+    image: bitnami/kafka:latest
+    container_name: kafka-node-1
+    hostname: kafka-node-1
+    user: root
+    networks:
+      - kafka_net
+    ports:
+      - '10100:9092'
+      - '10101:9093'
+      - '10102:9999'
+    environment:
+      # 设置broker最大内存，和初始内存
+      KAFKA_HEAP_OPTS: -Xmx512M -Xms256M
+      # 定义kafka服务端socket监听端口（Docker内部的ip地址和端口）
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      #定义外网访问地址（宿主机ip地址和端口）
+      KAFKA_BROKER_ID: 1
+      KAFKA_CFG_NODE_ID: 1
+      KAFKA_KRAFT_CLUSTER_ID: AAdAtQwviMccIQRerjrNRS
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://:9092
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka-node-1:9093,2@kafka-node-2:9093,3@kafka-node-3:9093
+      ALLOW_PLAINTEXT_LISTENER: yes
+      # 定义安全协议
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      # 允许使用Kraft
+      KAFKA_ENABLE_KRAFT: yes
+      KAFKA_CFG_PROCESS_ROLES: broker,controller
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      # JMX configure
+      KAFKA_JMX_HOSTNAME: kafka-node-1 
+      KAFKA_JMX_PORT: 9999
+      KAFKA_JMX_OPTS: 
+        -Djava.rmi.server.hostname=kafka-node-1
+        -Dcom.sun.management.jmxremote.local.only=false
+        -Dcom.sun.management.jmxremote.rmi.port=9999
+        -Dcom.sun.management.jmxremote.port=9999
+        -Dcom.sun.management.jmxremote.authenticate=false
+        -Dcom.sun.management.jmxremote.ssl=false
+    volumes:
+      - /home/docker/kafka/node-1/data:/bitnami/kafka
+    restart: always
+
+  kafka-node-2:
+    image: bitnami/kafka:latest
+    container_name: kafka-node-2
+    hostname: kafka-node-2
+    user: root
+    networks:
+      - kafka_net
+    ports:
+      - '10110:9092'
+      - '10111:9093'
+      - '10112:9999'
+    environment:
+      KAFKA_HEAP_OPTS: -Xmx512M -Xms256M
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      KAFKA_BROKER_ID: 2
+      KAFKA_CFG_NODE_ID: 2
+      KAFKA_KRAFT_CLUSTER_ID: AAdAtQwviMccIQRerjrNRS
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://:9092
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka-node-1:9093,2@kafka-node-2:9093,3@kafka-node-3:9093
+      ALLOW_PLAINTEXT_LISTENER: yes
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_ENABLE_KRAFT: yes
+      KAFKA_CFG_PROCESS_ROLES: broker,controller
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_JMX_HOSTNAME: kafka-node-2
+      KAFKA_JMX_PORT: 9999
+      KAFKA_JMX_OPTS: 
+        -Djava.rmi.server.hostname=kafka-node-2
+        -Dcom.sun.management.jmxremote.local.only=false
+        -Dcom.sun.management.jmxremote.rmi.port=9999
+        -Dcom.sun.management.jmxremote.port=9999
+        -Dcom.sun.management.jmxremote.authenticate=false
+        -Dcom.sun.management.jmxremote.ssl=false
+    volumes:
+      - /home/docker/kafka/node-2/data:/bitnami/kafka
+    restart: always
+
+  kafka-node-3:
+    image: bitnami/kafka:latest
+    container_name: kafka-node-3
+    hostname: kafka-node-3
+    user: root
+    networks:
+      - kafka_net
+    ports:
+      - '10120:9092'
+      - '10121:9093'
+      - '10122:9999'
+    environment:
+      KAFKA_HEAP_OPTS: -Xmx512M -Xms256M
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      KAFKA_BROKER_ID: 3
+      KAFKA_CFG_NODE_ID: 3
+      KAFKA_KRAFT_CLUSTER_ID: AAdAtQwviMccIQRerjrNRS
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://:9092
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka-node-1:9093,2@kafka-node-2:9093,3@kafka-node-3:9093
+      ALLOW_PLAINTEXT_LISTENER: yes
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_ENABLE_KRAFT: yes
+      KAFKA_CFG_PROCESS_ROLES: broker,controller
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_JMX_HOSTNAME: kafka-node-3
+      KAFKA_JMX_PORT: 9999
+      KAFKA_JMX_OPTS: 
+        -Djava.rmi.server.hostname=kafka-node-3
+        -Dcom.sun.management.jmxremote.local.only=false
+        -Dcom.sun.management.jmxremote.rmi.port=9999
+        -Dcom.sun.management.jmxremote.port=9999
+        -Dcom.sun.management.jmxremote.authenticate=false
+        -Dcom.sun.management.jmxremote.ssl=false
+    volumes:
+      - /home/docker/kafka/node-3/data:/bitnami/kafka
+    restart: always
+
+
+networks:
+  kafka_net:
+    driver: bridge
