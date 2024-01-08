@@ -1,0 +1,176 @@
+# logging:
+#   level:
+#     root: INFO
+#     com.provectus: DEBUG
+#     org.springframework.http.codec.json.Jackson2JsonEncoder: DEBUG
+#     org.springframework.http.codec.json.Jackson2JsonDecoder: DEBUG
+#     reactor.netty.http.server.AccessLog: INFO
+#     org.springframework.security: DEBUG#server:
+
+#  port: 8080 #- Port in which kafka-ui will run.
+
+dynamic.config.enabled: true
+
+auth:
+  # type: DISABLED
+  # type: OAUTH2
+  type: LDAP
+  # oauth2:
+  #   client:
+  #     cognito:
+  #       clientId: # CLIENT ID
+  #       clientSecret: # CLIENT SECRET
+  #       scope: openid
+  #       client-name: cognito
+  #       provider: cognito
+  #       redirect-uri: http://localhost:8080/login/oauth2/code/cognito
+  #       authorization-grant-type: authorization_code
+  #       issuer-uri: https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_M7cIUn1nj
+  #       jwk-set-uri: https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_M7cIUn1nj/.well-known/jwks.json
+  #       user-name-attribute: cognito:username
+  #       custom-params:
+  #         type: cognito
+  #         logoutUrl: https://kafka-ui.auth.eu-central-1.amazoncognito.com/logout
+  #     google:
+  #       provider: google
+  #       clientId: # CLIENT ID
+  #       clientSecret: # CLIENT SECRET
+  #       user-name-attribute: email
+  #       custom-params:
+  #         type: google
+  #         allowedDomain: provectus.com
+  #     github:
+  #       provider: github
+  #       clientId: # CLIENT ID
+  #       clientSecret: # CLIENT SECRET
+  #       scope:
+  #         - read:org
+  #       user-name-attribute: login
+  #       custom-params:
+  #         type: github
+
+kafka:
+  clusters:
+    - bootstrapServers: 172.29.153.93:10100,172.29.153.93:10110,172.29.153.93:10120
+      kafkaConnect:
+      - address: http://172.29.153.93:10190
+        name: Kafka Cluster Main Connectors
+      metrics:
+        port: 9999
+        type: JMX
+      name: Kafka Cluster Main
+      properties: {}
+      readOnly: false
+      schemaRegistry: http://172.29.153.93:10180
+
+spring:
+  jmx:
+    enabled: true
+  ldap:
+    urls: ldap://ec2-43-198-225-96.ap-east-1.compute.amazonaws.com:8389
+    base: dc=materia-logic,dc=com
+    admin-user: cn=admin,dc=materia-logic,dc=com
+    admin-password: MLAdmin2307
+    user-filter-search-base: dc=materia-logic,dc=com
+    user-filter-search-filter: (&(uid={0})(objectClass=inetOrgPerson))
+    group-filter-search-base: dc=materia-logic,dc=com # required for RBAC
+    # group-filter-search-filter: memberUid={0}
+    # group-filter-search-filter: (&(cn={0})(objectClass=posixGroup))
+    group-filter-search-filter: (&(memberUid={0})(objectClass=posixGroup))
+    group-role-attribute: cn
+
+oauth2:
+  ldap:
+    activeDirectory: false
+#     aсtiveDirectory.domain: dc=materia-logic,dc=com
+
+rbac:
+  roles:
+    - name: "admins"
+      clusters:
+        - Kafka Cluster Main
+      subjects:
+        # - provider: oauth_google
+        #   type: domain
+        #   value: "provectus.com"
+        # - provider: oauth_google
+        #   type: user
+        #   value: "name@provectus.com"
+        # - provider: oauth_github
+        #   type: organization
+        #   value: "provectus"
+        # - provider: oauth_github
+        #   type: user
+        #   value: "memelord"
+        # - provider: oauth_cognito
+        #   type: user
+        #   value: "username"
+        # - provider: oauth_cognito
+        #   type: group
+        #   value: "memelords"
+        - provider: ldap
+          type: group
+          value: "Admin Group"
+        # NOT IMPLEMENTED YET
+        # - provider: ldap_ad
+        #   type: group
+        #   value: "admin_staff"
+      permissions:
+        - resource: applicationconfig
+          actions: all # view, edit
+        - resource: clusterconfig
+          actions: all # view, edit
+        - resource: topic
+          value: ".*"
+          actions: all # view, create, edit, delete, messages_read, messages_produce, messages_delete
+        - resource: consumer
+          value: ".*"
+          actions: all # view, delete, reset_offsets
+        - resource: schema
+          value: ".*"
+          actions: all # view, create, delete, edit, modify_global_compatibility
+        - resource: connect
+          value: ".*"
+          actions: all # view, edit, create, restart
+        - resource: ksql
+          actions: all # execute
+        - resource: acl
+          value: ".*"
+          actions: all # view, edit
+        # - resource: audit
+        #   actions: all
+
+    - name: "readonly"
+      clusters:
+        - Kafka Cluster Main
+      subjects:
+        - provider: ldap
+          type: group
+          value: "dev"
+      permissions:
+        - resource: clusterconfig
+          actions: 
+            - VIEW
+        - resource: topic
+          value: ".*"
+          actions: 
+            - VIEW
+            - MESSAGES_READ
+        - resource: consumer
+          value: ".*"
+          actions: 
+            - VIEW
+        - resource: schema
+          value: ".*"
+          actions: 
+            - VIEW
+        - resource: connect
+          value: ".*"
+          actions: 
+            - VIEW
+        - resource: acl
+          value: ".*"
+          actions: 
+            - VIEW
+
+webclient: {}
