@@ -88,26 +88,6 @@ def genSlackNotificationBlocks(build) {
         'FAILURE': ':red_circle:',
         'UNSTABLE': ':large_orange_circle:',
     ]
-    // def changeSets = build.changeSets
-    // if (changeSets != null) {
-    //     def hadChanges = false
-    //     def changeDetail = new StringBuilder()
-    //     changeSets.each { cs_list ->
-    //         cs_list.each { cs ->
-    //             hadChanges = true
-    //             changeDetail.append("Revision ${cs.hasProperty('commitId') ? cs.commitId : cs.hasProperty('revision') ? cs.revision : cs.hasProperty('changeNumber') ? cs.changeNumber : ''} by ${cs.author}\n")
-    //             changeDetail.append("${cs.msgAnnotated}\n")
-    //             cs.affectedFiles.each { p ->
-    //                 changeDetail.append("${p.editType.name} ${p.path}\n")
-    //             }
-    //         }
-    //     }
-    //     if (!hadChanges) {
-    //         changeDetail.append("No Changes")
-    //     }
-    //     println(changeDetail.toString())
-    // }
-
     def changeSets = build.changeSets
     println changeSets
     def changeDetail = new StringBuilder()
