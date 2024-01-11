@@ -213,6 +213,7 @@ services:
       KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS: http://ip-172-31-19-148.ap-east-1.compute.internal:10190
       KAFKA_CLUSTERS_0_METRICS_PORT: 9999
       KAFKA_CLUSTERS_0_METRICS_TYPE: JMX
+      # SPRING_CONFIG_ADDITIONAL-LOCATION: /roles.yml
       # SPRING_CONFIG_ADDITIONAL-LOCATION: /config.yml
     # volumes:
     #   - /mnt/data/docker/kafka/ui/config.yml:/etc/kafkaui/dynamic_config.yaml
