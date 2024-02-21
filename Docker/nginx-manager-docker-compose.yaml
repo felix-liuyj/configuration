@@ -12,6 +12,8 @@ services:
       # Add any other Stream port you want to expose
       - '21:21' # FTP
     environment:
+      PUID: 1000
+      PGID: 1000
       # Mysql/Maria connection parameters:
       DB_MYSQL_HOST: 43.198.225.96
       DB_MYSQL_PORT: 3306

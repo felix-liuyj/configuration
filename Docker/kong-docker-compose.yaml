@@ -1,0 +1,112 @@
+version: '3'
+services: 
+  postgres-database:
+    image: postgres:9.6
+    container_name: postgres-database
+    hostname: postgres-database
+    networks: 
+      - kong-net
+    command: "-c max_connections=5000"
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: kong
+      POSTGRES_PASSWORD: kongpass
+    volumes:
+      - /home/docker/postgres/data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+    restart: always
+
+#######################
+# 执行数据库迁移
+######################
+  kong-migration:
+    image: kong:latest
+    container_name: kong-migration
+    command: "kong migrations bootstrap"
+    networks: 
+      - kong-net
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: postgres-database
+      KONG_PG_DATABASE: kong
+      KONG_PG_PASSWORD: kongpass
+    links: 
+      - postgres-database #连接的是postgres-database服务的
+    depends_on:
+      - postgres-database #依赖于postgres-database服务
+    restart: on-failure
+
+#####################
+# kong gateway
+#####################
+  kong:
+    image: kong:latest
+    container_name: kong
+    hostname: kong
+    networks:
+      - kong-net
+    depends_on:
+      - kong-migration
+      - postgres-database
+    ports:
+      - "8001:8001"
+      - "8003:8000"
+      - "8443:8443"
+      - "8444:8444"
+    environment:
+      TZ: Asia/Shanghai
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: postgres-database
+      KONG_PG_USER: postgres
+      KONG_PG_PASSWORD: kongpass
+      # KONG_CASSANDRA_CONTACT_POINTS: postgres-database
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001, 0.0.0.0:8444 ssl
+    restart: always
+
+#######################
+#以下两个是konga  GUI
+#######################
+  konga-prepare:
+    image: pantsel/konga:latest
+    container_name: konga-prepare
+    command: "-c prepare -a postgres -u postgresql://postgres:kongpass@postgres-database:5432/konga"  #注意是用户名：密码@数据库服务名称：端口
+    networks:
+      - kong-net
+    restart: on-failure
+    links:
+      - postgres-database
+    depends_on:
+      - kong        #依赖kong服务
+      - postgres-database #依赖postgres-database服务
+
+  konga:
+    image: pantsel/konga:latest
+    container_name: konga
+    networks:
+      - kong-net
+    environment:
+      DB_ADAPTER: postgres
+      DB_HOST: postgres-database
+      DB_USER: postgres
+      DB_DATABASE: konga
+      DB_PASSWORD: kongpass #必须加上密码，不然会失败
+    depends_on:
+      - kong
+      - postgres-database
+    ports:
+      - "1337:1337"
+    restart: always
+
+networks:
+  kong-net:
+    driver: bridge

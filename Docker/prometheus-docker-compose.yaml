@@ -82,9 +82,26 @@ services:
     hostname: monitor-kafka-exporter
     restart: always
     ports:
-      - "8102:9000"
+      - "8102:9308"
+    environment:
+      CONFIG_FILEPATH: /app/kminion.yaml
+      # KAFKA_BROKERS: ip-172-31-19-148.ap-east-1.compute.internal:10100,ip-172-31-19-148.ap-east-1.compute.internal:10101,ip-172-31-19-148.ap-east-1.compute.internal:10102
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /mnt/data/docker/monitor/kminion/configure.yaml:/app/kminion.yaml
     networks:
       - monitor
+      - kafka-cluster_kafka_net
+
+  monitor-postgres-exporter:
+    image: prometheuscommunity/postgres-exporter
+    container_name: monitor-postgres-exporter
+    hostname: monitor-postgres-exporter
+    restart: always
+    environment:
+      DATA_SOURCE_NAME: postgresql://postgres:123456@postgresql:5432/postgres?sslmode=disable
+    ports:
+      - 9187:9187
 
   monitor-consul:
     image: consul:1.9.4
@@ -100,3 +117,5 @@ services:
 networks:
   monitor:
     driver: bridge
+  kafka-cluster_kafka_net:
+    external: true

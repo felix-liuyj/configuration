@@ -1,0 +1,32 @@
+version: '3'
+
+services: 
+  postgresql-database:
+    image: postgres:9.6
+    container_name: postgresql-database
+    hostname: postgresql-database
+    networks: 
+      - postgresql
+      - kong-net
+    command: "-c max_connections=5000"
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_DB: root
+      POSTGRES_PASSWORD: QvY5sJozv8oxxvGh8EOjqapoa12IoYI6
+    volumes:
+      - /mnt/data/docker/postgresql/data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+    restart: always
+
+
+networks:
+  postgresql:
+    driver: bridge
+  kong-net:
+    external: true
