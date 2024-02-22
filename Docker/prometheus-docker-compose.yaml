@@ -11,7 +11,7 @@ services:
       - /mnt/data/docker/monitor/prometheus/conf:/etc/prometheus
       - /mnt/data/docker/monitor/prometheus/data:/prometheus
     ports:
-      - "8003:9090"
+      - "8004:9090"
     networks:
       - monitor
     command:
@@ -27,7 +27,7 @@ services:
     volumes:
       - /mnt/data/docker/monitor/alertmanager/conf:/etc/alertmanager
     ports:
-      - "8004:9093"
+      - "8005:9093"
     networks:
       - monitor
 
@@ -38,12 +38,23 @@ services:
     user: root
     restart: always
     ports:
-      - "8005:3000"
+      - "8006:3000"
     volumes:
       - /mnt/data/docker/monitor/grafana/data:/var/lib/grafana
       - /mnt/data/docker/monitor/grafana/config:/etc/grafana
     networks:
       - monitor
+
+  monitor-consul:
+    image: consul:1.9.4
+    container_name: monitor-consul
+    restart: always
+    user: root
+    ports:
+      - "8007:8500"
+    volumes:
+      - /mnt/data/docker/monitor/consul/data:/consul/data
+    command: [agent, -server, -ui, -client=0.0.0.0, -bootstrap-expect=1]
 
   monitor-node-exporter:
     image: quay.io/prometheus/node-exporter
@@ -53,7 +64,7 @@ services:
     user: root
     pid: host
     ports:
-      - "8100:9100"
+      - "10000:9100"
     networks:
       - monitor
     command:
@@ -67,7 +78,7 @@ services:
     hostname: monitor-mongodb-exporter
     restart: always
     ports:
-      - "8101:9216"
+      - "10001:9216"
       - "17001:17001"
     networks:
       - monitor
@@ -82,7 +93,7 @@ services:
     hostname: monitor-kafka-exporter
     restart: always
     ports:
-      - "8102:9308"
+      - "10002:8080"
     environment:
       CONFIG_FILEPATH: /app/kminion.yaml
       # KAFKA_BROKERS: ip-172-31-19-148.ap-east-1.compute.internal:10100,ip-172-31-19-148.ap-east-1.compute.internal:10101,ip-172-31-19-148.ap-east-1.compute.internal:10102
@@ -93,26 +104,15 @@ services:
       - monitor
       - kafka-cluster_kafka_net
 
-  monitor-postgres-exporter:
+  monitor-postgresql-exporter:
     image: prometheuscommunity/postgres-exporter
-    container_name: monitor-postgres-exporter
-    hostname: monitor-postgres-exporter
+    container_name: monitor-postgresql-exporter
+    hostname: monitor-postgresql-exporter
     restart: always
     environment:
-      DATA_SOURCE_NAME: postgresql://postgres:123456@postgresql:5432/postgres?sslmode=disable
+      DATA_SOURCE_NAME: postgresql://root:QvY5sJozv8oxxvGh8EOjqapoa12IoYI6@postgresql:5432/postgres?sslmode=disable
     ports:
-      - 9187:9187
-
-  monitor-consul:
-    image: consul:1.9.4
-    container_name: monitor-consul
-    restart: always
-    user: root
-    ports:
-      - "8101:8500"
-    volumes:
-      - /mnt/data/docker/monitor/consul/data:/consul/data
-    command: [agent, -server, -ui, -client=0.0.0.0, -bootstrap-expect=1]
+      - 10003:9187
 
 networks:
   monitor:

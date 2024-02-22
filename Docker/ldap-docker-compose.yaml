@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   ldap:
@@ -19,7 +19,7 @@ services:
     container_name: ldap-admin
     image: osixia/phpldapadmin
     ports:
-      - "8443:443"
+      - "8002:443"
     environment:
       - PHPLDAPADMIN_LDAP_HOSTS=ldap
 
@@ -28,7 +28,7 @@ services:
     image: tiredofit/self-service-password
     restart: always
     ports:
-      - "8002:80"
+      - "8003:80"
     environment:
       - LDAP_SERVER=ldap
       - LDAP_BINDDN=cn=admin,dc=materia-logic,dc=com
@@ -50,6 +50,6 @@ services:
     deploy:
       resources:
         limits:
-           memory: 2G
+          memory: 2G
         reservations:
-           memory: 512M
+          memory: 512M

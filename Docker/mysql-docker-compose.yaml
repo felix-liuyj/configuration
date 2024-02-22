@@ -2,16 +2,23 @@ version: '3'
 services:
   mysql:
     container_name: mysql
-    image: swr.cn-north-4.myhuaweicloud.com/silverfenrir/mysql:latest
-    hostname: "mysql"
+    image: 	mysql:latest	
+    hostname: mysql
+    networks:
+      - inner_net
     ports:
-      - "3306:3306"
-    network_mode: bridge
+      - 3306:3306
     environment:
-      MYSQL_ROOT_PASSWORD: MySQL-7cb1dc18
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: MLAdmin2307
     volumes:
-      - /root/docker/mysql/conf:/etc/mysql
-      - /root/docker/mysql/logs:/var/log/mysql
-      - /root/docker/mysql/data:/var/lib/mysql
-      - /root/docker/mysql/files:/var/lib/mysql-files
+      - /mnt/data/docker/mysql/conf:/etc/mysql
+      - /mnt/data/docker/mysql/logs:/var/log/mysql
+      - /mnt/data/docker/mysql/data:/var/lib/mysql
+      - /mnt/data/docker/mysql/files:/var/lib/mysql-files
+      - /mnt/data/docker/mysql/conf/my.cnf:/etc/mysql/my.cnf
     restart: always
+
+networks:
+  inner_net:
+    external: true

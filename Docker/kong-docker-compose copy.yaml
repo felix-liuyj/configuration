@@ -55,7 +55,7 @@ services:
       TZ: Asia/Shanghai
       # KONG_ADMIN_GUI_PATH: /
       KONG_ADMIN_GUI_URL: http://172.29.153.93:8002
-      # KONG_ADMIN_GUI_API_URL: 0.0.0.0:8001
+      KONG_ADMIN_GUI_API_URL: 0.0.0.0:8001
       # KONG_ADMIN_GUI_LISTEN: 0.0.0.0:8002
       KONG_DATABASE: postgres
       KONG_PG_HOST: kong-database
