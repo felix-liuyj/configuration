@@ -50,6 +50,10 @@ services:
       KONG_PROXY_ERROR_LOG: /dev/stderr
       KONG_ADMIN_ERROR_LOG: /dev/stderr
       KONG_ADMIN_LISTEN: 0.0.0.0:8001, 0.0.0.0:8443 ssl
+    volumes:
+      - /mnt/data/docker/kong/config:/etc/kong
+      - /mnt/data/docker/kong/lua_kong:/usr/local/share/lua/5.1/kong
+      - /mnt/data/docker/kong/plugins:/plugins
     restart: always
 
 #######################
