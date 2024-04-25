@@ -2,20 +2,15 @@ version: '3'
 services:
   mysql:
     container_name: mongodb
-    image: swr.cn-north-4.myhuaweicloud.com/silverfenrir/mysql:latest
+    image: 	mongo:6.0
     hostname: "mongodb"
     ports:
-      - "3717:27017"
+      - "8117:27017"
     network_mode: bridge
     environment:
       - TZ=Asia/Shanghai
-      - MONGO_INITDB_DATABASE=crypto_gateway
-      - MONGO_INITDB_ROOT_USERNAME=CryptoGatewayProd
-      - MONGO_INITDB_ROOT_PASSWORD=SitepfItWzbzhS5aiVYjGjTHtPKP0wOq
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=N%zM2UWDUmXV
     volumes:
-      - /mnt/data/docker/mongodb/config:/data/configdb
-      - /mnt/data/docker/mongodb/logs:/data/logs
       - /mnt/data/docker/mongodb/data:/data/db
-      - /mnt/data/docker/mongodb/mongod.conf:/etc/mongo/mongod.conf
-    command: mongod --config /etc/mongo/mongod.conf
     restart: always

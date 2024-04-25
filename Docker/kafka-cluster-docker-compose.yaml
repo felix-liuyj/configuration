@@ -198,7 +198,7 @@ services:
     environment:
       DYNAMIC_CONFIG_ENABLED: true
       AUTH_TYPE: LDAP
-      SPRING_LDAP_URLS: ldap://ip-172-31-19-148.ap-east-1.compute.internal:389
+      SPRING_LDAP_URLS: ldap://ip-172-31-19-148.ap-east-1.compute.internal:8042
       SPRING_LDAP_BASE: cn=Admin Group,dc=materia-logic,dc=com
       SPRING_LDAP_ADMIN_USER: cn=admin,dc=materia-logic,dc=com
       SPRING_LDAP_ADMIN_PASSWORD: MLAdmin2307

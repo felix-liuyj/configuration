@@ -1,0 +1,73 @@
+version: '3'
+services:
+  redis-cluster-node-01:
+    image: redis:latest
+    container_name: redis-cluster-node-01
+    environment:
+      TZ: Asia/Shanghai
+    network_mode: host
+    command: redis-server /etc/redis/redis.conf
+    volumes:
+      - /mnt/data/docker/redis-cluster/node-01/conf:/etc/redis/
+      - /mnt/data/docker/redis-cluster/node-01/data:/data
+    restart: always
+
+  redis-cluster-node-02:
+    image: redis:latest
+    container_name: redis-cluster-node-02
+    environment:
+      TZ: Asia/Shanghai
+    network_mode: host
+    command: redis-server /etc/redis/redis.conf
+    volumes:
+      - /mnt/data/docker/redis-cluster/node-02/conf:/etc/redis/
+      - /mnt/data/docker/redis-cluster/node-02/data:/data
+    restart: always
+
+  redis-cluster-node-03:
+    image: redis:latest
+    container_name: redis-cluster-node-03
+    environment:
+      TZ: Asia/Shanghai
+    network_mode: host
+    command: redis-server /etc/redis/redis.conf
+    volumes:
+      - /mnt/data/docker/redis-cluster/node-03/conf:/etc/redis/
+      - /mnt/data/docker/redis-cluster/node-03/data:/data
+    restart: always
+
+  redis-cluster-node-04:
+    image: redis:latest
+    container_name: redis-cluster-node-04
+    environment:
+      TZ: Asia/Shanghai
+    network_mode: host
+    command: redis-server /etc/redis/redis.conf
+    volumes:
+      - /mnt/data/docker/redis-cluster/node-04/conf:/etc/redis/
+      - /mnt/data/docker/redis-cluster/node-04/data:/data
+    restart: always
+
+  redis-cluster-node-05:
+    image: redis:latest
+    container_name: redis-cluster-node-05
+    environment:
+      TZ: Asia/Shanghai
+    network_mode: host
+    command: redis-server /etc/redis/redis.conf
+    volumes:
+      - /mnt/data/docker/redis-cluster/node-05/conf:/etc/redis/
+      - /mnt/data/docker/redis-cluster/node-05/data:/data
+    restart: always
+
+  redis-cluster-node-06:
+    image: redis:latest
+    container_name: redis-cluster-node-06
+    environment:
+      TZ: Asia/Shanghai
+    network_mode: host
+    command: redis-server /etc/redis/redis.conf
+    volumes:
+      - /mnt/data/docker/redis-cluster/node-06/conf:/etc/redis/
+      - /mnt/data/docker/redis-cluster/node-06/data:/data
+    restart: always

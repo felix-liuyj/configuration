@@ -5,8 +5,8 @@ services:
     container_name: ldap
     image: osixia/openldap
     ports:
-      - "389:389"
-      - "636:636"
+      - "8042:389"
+      - "8043:636"
     environment:
       - LDAP_ORGANISATION=materia-logic
       - LDAP_DOMAIN=materia-logic.com
@@ -19,7 +19,7 @@ services:
     container_name: ldap-admin
     image: osixia/phpldapadmin
     ports:
-      - "8002:443"
+      - "8040:443"
     environment:
       - PHPLDAPADMIN_LDAP_HOSTS=ldap
 
@@ -28,7 +28,7 @@ services:
     image: tiredofit/self-service-password
     restart: always
     ports:
-      - "8003:80"
+      - "8041:80"
     environment:
       - LDAP_SERVER=ldap
       - LDAP_BINDDN=cn=admin,dc=materia-logic,dc=com

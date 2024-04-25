@@ -67,7 +67,7 @@ spring:
   jmx:
     enabled: true
   ldap:
-    urls: ldap://ec2-43-198-225-96.ap-east-1.compute.amazonaws.com:8389
+    urls: ldap://ec2-43-198-225-96.ap-east-1.compute.amazonaws.com:8042
     base: dc=materia-logic,dc=com
     admin-user: cn=admin,dc=materia-logic,dc=com
     admin-password: MLAdmin2307

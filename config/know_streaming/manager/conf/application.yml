@@ -120,7 +120,7 @@ management:
 
 ldap:
   enabled: true  #是否开启ldap认证。默认db账密认证
-  url: ldap://ip-172-31-19-148.ap-east-1.compute.internal:389     #ldap地址
+  url: ldap://ip-172-31-19-148.ap-east-1.compute.internal:8042     #ldap地址
   basedn: dc=materia-logic,dc=com
   factory: com.sun.jndi.ldap.LdapCtxFactory
   security:

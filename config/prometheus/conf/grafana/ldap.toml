@@ -6,7 +6,7 @@
 # Ldap server host (specify multiple hosts space separated)
 host = "ip-172-31-19-148.ap-east-1.compute.internal"
 # Default port is 389 or 636 if use_ssl = true
-port = 389
+port = 8042
 # Set to true if LDAP server should use an encrypted TLS connection (either with STARTTLS or LDAPS)
 use_ssl = false
 # If set to true, use LDAP with STARTTLS instead of LDAPS

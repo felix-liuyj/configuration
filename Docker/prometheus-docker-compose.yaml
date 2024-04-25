@@ -11,7 +11,7 @@ services:
       - /mnt/data/docker/monitor/prometheus/conf:/etc/prometheus
       - /mnt/data/docker/monitor/prometheus/data:/prometheus
     ports:
-      - "8004:9090"
+      - "8050:9090"
     networks:
       - monitor
     command:
@@ -27,7 +27,7 @@ services:
     volumes:
       - /mnt/data/docker/monitor/alertmanager/conf:/etc/alertmanager
     ports:
-      - "8005:9093"
+      - "8051:9093"
     networks:
       - monitor
 
@@ -38,7 +38,7 @@ services:
     user: root
     restart: always
     ports:
-      - "8006:3000"
+      - "8052:3000"
     volumes:
       - /mnt/data/docker/monitor/grafana/data:/var/lib/grafana
       - /mnt/data/docker/monitor/grafana/config:/etc/grafana
@@ -51,10 +51,17 @@ services:
     restart: always
     user: root
     ports:
-      - "8007:8500"
+      - "8053:8500"
     volumes:
       - /mnt/data/docker/monitor/consul/data:/consul/data
-    command: [agent, -server, -ui, -client=0.0.0.0, -bootstrap-expect=1]
+    command:
+      [
+        agent,
+        -server,
+        -ui,
+        -client=0.0.0.0,
+        -bootstrap-expect=1
+      ]
 
   monitor-node-exporter:
     image: quay.io/prometheus/node-exporter
@@ -109,10 +116,25 @@ services:
     container_name: monitor-postgresql-exporter
     hostname: monitor-postgresql-exporter
     restart: always
-    environment:
-      DATA_SOURCE_NAME: postgresql://root:QvY5sJozv8oxxvGh8EOjqapoa12IoYI6@postgresql:5432/postgres?sslmode=disable
     ports:
       - 10003:9187
+    environment:
+      DATA_SOURCE_NAME: postgresql://root:QvY5sJozv8oxxvGh8EOjqapoa12IoYI6@postgresql:5432/postgres?sslmode=disable
+
+  monitor-cadvisor-exporter:
+    image: gcr.io/cadvisor/cadvisor:v0.49.1
+    container_name: monitor-cadvisor-exporter
+    hostname: monitor-cadvisor-exporter
+    privileged: true
+    restart: always
+    ports:
+      - 10004:8080
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /mnt/data/docker/root/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
 
 networks:
   monitor:
